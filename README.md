@@ -2,7 +2,7 @@
 title: AI Code Explainer
 emoji: 💻
 colorFrom: blue
-colorTo: slate
+colorTo: blue
 sdk: gradio
 sdk_version: 4.44.1
 python_version: 3.10
