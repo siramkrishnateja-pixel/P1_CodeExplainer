@@ -128,13 +128,13 @@ with gr.Blocks(title="Code Explainer") as demo:
     )
 
 if __name__ == "__main__":
-    # Check if running on Hugging Face Spaces specifically
+    # On Hugging Face Spaces, SPACE_ID is set automatically by the platform
     is_spaces = os.environ.get("SPACE_ID") is not None
-    
+
     demo.launch(
         server_name="0.0.0.0" if is_spaces else "127.0.0.1",
-        server_port=7865, # Keeping your custom port 7865
+        server_port=7860,
         theme=custom_theme,
         ssr_mode=False,
-        share=not is_spaces  # Enable sharing only if NOT on HF Spaces
+        share=not is_spaces  # share=True locally (public tunnel), False on HF Spaces (already public)
     )
