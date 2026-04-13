@@ -10,16 +10,21 @@ import requests
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+# Load environment variables (locally from .env, or from HF Space Secrets)
 load_dotenv()
 
-raw_key = os.environ.get("HF_API_KEY", "YOUR_HUGGINGFACE_API_KEY").strip()
-HF_API_KEY = raw_key.replace("Bearer ", "").replace("'", "").replace('"', '')
+# Try both HF_API_KEY (manual) and HF_TOKEN (platform default)
+raw_key = os.environ.get("HF_API_KEY") or os.environ.get("HF_TOKEN") or ""
+HF_API_KEY = raw_key.strip().replace("Bearer ", "").strip("'").strip('"').strip()
+
 MODEL_ID = os.environ.get("MODEL_ID", "Qwen/Qwen2.5-Coder-32B-Instruct").strip()
 
 def explain_code(code: str, level: str):
     if not code or not code.strip():
         return "⚠️ **Please enter some code first so I have something to explain!**"
+    
+    if not HF_API_KEY or HF_API_KEY == "YOUR_HUGGINGFACE_API_KEY":
+        return "⚠️ **API Key Missing:** Please add your `HF_API_KEY` as a Secret in the Hugging Face Space Settings."
     
     # Send request to Hugging Face Serverless API (New Router API)
     API_URL = "https://router.huggingface.co/v1/chat/completions"
@@ -44,9 +49,20 @@ def explain_code(code: str, level: str):
             result = response.json()
             ai_text = result["choices"][0]["message"]["content"].strip()
             return f"### AI Explanation ({level} Level) 🧠\n\n{ai_text}"
+        elif response.status_code == 401:
+            # Debug info to help the user identify token issues without revealing the full secret
+            key_preview = f"{HF_API_KEY[:4]}...{HF_API_KEY[-4:]}" if len(HF_API_KEY) > 10 else "N/A"
+            key_len = len(HF_API_KEY)
+            return (
+                f"⚠️ **Authentication Error (401):** The Hugging Face token is invalid.\n\n"
+                f"- **Token Preview**: `{key_preview}`\n"
+                f"- **Token Length**: {key_len} chars\n"
+                f"- **Action**: Ensure your Secret is named `HF_API_KEY` and contains just the token (no quotes, no 'Bearer')."
+            )
         else:
-            error_msg = response.json().get("error", str(response.text))
-            return f"⚠️ **API Error:** {error_msg}"
+            error_data = response.json() if response.headers.get("content-type") == "application/json" else {"error": response.text}
+            error_msg = error_data.get("error", str(response.text))
+            return f"⚠️ **API Error ({response.status_code}):** {error_msg}"
             
     except Exception as e:
         return f"⚠️ **Connection Error:** {str(e)}"
@@ -84,7 +100,7 @@ function toggleTheme() {
 }
 """
 
-with gr.Blocks(title="Code Explainer") as demo:
+with gr.Blocks(theme=custom_theme, title="Code Explainer") as demo:
     with gr.Row(elem_classes="header-row"):
         gr.Markdown(
             """
@@ -134,7 +150,6 @@ if __name__ == "__main__":
     demo.launch(
         server_name="0.0.0.0" if is_spaces else "127.0.0.1",
         server_port=7860,
-        theme=custom_theme,
         ssr_mode=False,
         share=not is_spaces  # share=True locally (public tunnel), False on HF Spaces (already public)
     )
