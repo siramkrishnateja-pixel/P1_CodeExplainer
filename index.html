@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Explainer | AI-Powered Clarity</title>
+    <meta name="description" content="Paste your complex code and get a simple, easy-to-understand explanation powered by AI.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-mode">
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <!-- Site Logo -->
+    <div class="site-logo" id="siteLogo" title="Refresh Page" onclick="window.location.reload();">
+        <span class="logo-c">C</span><span class="logo-e">E</span>
+    </div>
+
+    <!-- Theme Toggle Settings -->
+    <div class="controls-container">
+        <button id="themeToggle" class="theme-toggle-btn">
+            <span class="theme-icon">🌙</span> <span class="theme-text">Dark Mode</span>
+        </button>
+    </div>
+
+    <main class="container">
+        <header class="header">
+            <h1 class="title">Code <span class="highlight">Explainer</span></h1>
+            <p class="subtitle">Paste your complex code snippet below, and our AI will explain it in plain English.</p>
+        </header>
+
+        <section class="app-layout">
+            <!-- Input Section -->
+            <div class="panel input-panel">
+                <div class="panel-header">
+                    <h2>Source Code</h2>
+                    <div class="mac-buttons">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+                <textarea id="codeInput" placeholder="// Paste your messy or complex code here...&#10;&#10;function calculateMagic(a, b) {&#10;  return a * b + 42;&#10;}&#10;..."></textarea>
+                
+                <div class="options-bar">
+                    <span class="options-label">Select Detail Level:</span>
+                    <div class="pill-group" id="levelSelector">
+                        <button class="pill active" data-level="10 Year Old">10 Year Old</button>
+                        <button class="pill" data-level="Beginner">Beginner</button>
+                        <button class="pill" data-level="Intermediate">Intermediate</button>
+                        <button class="pill" data-level="Professional">Professional</button>
+                        <button class="pill" data-level="Improve Code">Improve Code</button>
+                    </div>
+                    
+                    <div class="api-key-container" style="display: flex; align-items: center; gap: 8px;">
+                        <span class="options-label">Token:</span>
+                        <input type="password" id="apiKeyInput" placeholder="Paste HF API Key here..." class="api-input" title="Your key is securely saved locally in your browser">
+                    </div>
+                </div>
+
+                <div class="action-bar">
+                    <button id="explainBtn" class="primary-btn">
+                        <span class="btn-text">Explain in Simple Words</span>
+                        <svg class="sparkle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Output Section -->
+            <div class="panel output-panel">
+                <div class="panel-header">
+                    <h2>Explanation</h2>
+                    <div class="status-badge" id="statusBadge">Ready</div>
+                </div>
+                
+                <div class="output-content" id="outputContent">
+                    <div class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="m9 15 2 2 4-4"/></svg>
+                        <p>Your explanation will appear here.</p>
+                    </div>
+                </div>
+                
+                <!-- Loading State (Hidden by default) -->
+                <div class="loader-container" id="loaderContainer">
+                    <div class="pulsing-skeleton"></div>
+                    <div class="pulsing-skeleton short"></div>
+                    <div class="pulsing-skeleton long"></div>
+                    <p class="loader-text">Analyzing your code...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+</html>
