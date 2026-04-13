@@ -1,3 +1,15 @@
+---
+title: AI Code Explainer
+emoji: 💻
+colorFrom: blue
+colorTo: slate
+sdk: gradio
+sdk_version: 4.44.1
+python_version: 3.10
+app_file: app.py
+pinned: false
+---
+
 # AI Code Explainer
 
 An AI-powered application that explains complex code snippets in simple, plain English.
