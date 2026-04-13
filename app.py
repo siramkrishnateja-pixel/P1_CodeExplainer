@@ -84,7 +84,7 @@ function toggleTheme() {
 }
 """
 
-with gr.Blocks(theme=custom_theme, title="Code Explainer") as demo:
+with gr.Blocks(title="Code Explainer") as demo:
     with gr.Row(elem_classes="header-row"):
         gr.Markdown(
             """
@@ -128,4 +128,13 @@ with gr.Blocks(theme=custom_theme, title="Code Explainer") as demo:
     )
 
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1", server_port=7865)
+    # Check if running on Hugging Face Spaces specifically
+    is_spaces = os.environ.get("SPACE_ID") is not None
+    
+    demo.launch(
+        server_name="0.0.0.0" if is_spaces else "127.0.0.1",
+        server_port=7865, # Keeping your custom port 7865
+        theme=custom_theme,
+        ssr_mode=False,
+        share=not is_spaces  # Enable sharing only if NOT on HF Spaces
+    )
